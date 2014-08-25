@@ -1,8 +1,12 @@
 $fn = 32;
 
-thickness = 2;
+thickness = 3;
 
+// diameter of mounting holes
 hole_dia = 3.25;
+
+// overall offset of board from extrusion
+board_offset = 8;
 
 // Center to center spacing 
 hole_spacing = 49.5;
@@ -46,13 +50,14 @@ module make_bracket(){
 }
 
 module make_extrusion_mount(){
+	mount_thickness = thickness + 2;
 	translate([mount_pos,-width/2, -extrusion_width]){
 		difference(){
-			translate([0, 0, thickness/2])
+			translate([0, 0, mount_thickness/2])
 			union(){
-				cube([thickness, width, extrusion_width - thickness/2]);
-				translate([thickness/2,0,0]) rotate([-90,0,0])
-					cylinder(r=thickness/2, h=width);
+				cube([mount_thickness, width, extrusion_width - mount_thickness/2]);
+				translate([mount_thickness/2,0,0]) rotate([-90,0,0])
+					cylinder(r=mount_thickness/2, h=width);
 			}
 			
 	
@@ -68,14 +73,14 @@ module make_extrusion_mount(){
 module holes(){
 	translate([hole_offset_x(), 0,-1]){
 		cylinder(h=20, r= hole_dia/2);
-		translate([49.5,0,0])  cylinder(h=20, r= hole_dia/2);
+		translate([hole_spacing,0,0])  cylinder(h=20, r= hole_dia/2);
 	}
 }
 
 module board_supports(){
 	translate([hole_offset_x(), 0,-0.05]){
-		cylinder(h=6, r= width/2);
-		translate([49.5,0,0])  cylinder(h=6, r= width/2);
+		cylinder(h=board_offset, r= width/2);
+		translate([hole_spacing,0,0])  cylinder(h=board_offset, r= width/2);
 	}
 }
 
